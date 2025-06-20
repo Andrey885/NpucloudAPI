@@ -7,8 +7,8 @@ from . import core
 from .types import ProfilingInfo, CreateTaskResponse, RunTaskResult
 
 
-def inference(x: np.typing.NDArray, model_id: str, token: str
-              ) -> tp.Tuple[np.typing.NDArray[np.float16], ProfilingInfo]:
+def inference(x: np.ndarray, model_id: str, token: str
+              ) -> tp.Tuple[np.ndarray, ProfilingInfo]:
     """
     Call the npucloud inference.
     Parameters:

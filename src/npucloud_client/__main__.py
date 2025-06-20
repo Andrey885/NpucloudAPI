@@ -13,20 +13,23 @@ def test():
     parser.add_argument('--model_id', required=True, type=str,
                         help="ID of the model to run. Upload your ONNX model at https://npucloud.tech/upload.php "
                              "and get its ID at https://npucloud.tech/models.php")
-    parser.add_argument('--shape', required=True, type=str,
-                        help="Shape of the random input in a comma-separated string format. "
-                             "Example: \"1,3,224,224\"")
-    parser.add_argument('--n_repeats', type=int,
-                        help="N times to repeat the query")
+    parser.add_argument('--array_path', type=str, default="",
+                        help="Path to an .npy file with the input data. If not provided, will create "
+                             "a random array of shape --inp_shape")
+    parser.add_argument('--inp_shape', type=str, default="",
+                        help="If provided, create random array of this shape for testing purposes. "
+                             "Accept comma-separated string. Example: \"1,3,224,224\"")    
     args = parser.parse_args()
-    try:
-        shape = [int(s) for s in args.shape.split(",")]
-    except ValueError as e:
-        raise ValueError(f"Could not parse shape {args.shape}") from e
-    x = np.random.randn(*shape)
-    for _ in range(args.n_repeats):
-        _, profiling_info = inference(x, args.model_id, args.token)
-        print(profiling_info)
+    if args.array_path != "":
+        x = np.load(args.array_path)
+    else:
+        try:
+            shape = [int(s) for s in args.inp_shape.split(",")]
+        except ValueError as e:
+            raise ValueError(f"Could not parse shape {args.shape}") from e
+        x = np.random.randn(*shape)
+    _, profiling_info = inference(x, args.model_id, args.token)
+    print(profiling_info)
 
 
 if __name__ == '__main__':
