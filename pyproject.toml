@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "npucloud_client"
+version = "0.1.0"
+description = "Official Python client for fast model inference on NPUCloud"
+authors = [
+  { name="Andrey Shilov", email="asshilov@yandex.com" }
+]
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "Apache 2" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+]
+
+dependencies = [
+    "numpy",
+    "requests",
+]
+
+[project.urls]
+Homepage = "https://github.com/Andrey885/NpucloudAPI"
+Source = "https://github.com/Andrey885/NpucloudAPI"
+Documentation = "https://github.com/Andrey885/NpucloudAPI#readme"
+
+[tool.setuptools.packages.find]
+where = ["src"]
