@@ -5,9 +5,13 @@ import numpy as np
 from . import inference
 
 
-def test():
-    """Call the inference with random input"""
-    parser = argparse.ArgumentParser(desc="Call the inference with random input")
+def main():
+    """
+    Calls the inference from cmd.
+    Example:
+        python -m npucloud_client --token <YOUR_TOKEN> --model_id <YOUR_MODEL_ID> --inp_shape <YOUR_SHAPE>
+    """
+    parser = argparse.ArgumentParser(description="Call the inference with random input")
     parser.add_argument('--token', required=True, type=str,
                         help="Inference token. Get your token at https://npucloud.tech/payments.php")
     parser.add_argument('--model_id', required=True, type=str,
@@ -33,4 +37,4 @@ def test():
 
 
 if __name__ == '__main__':
-    test()
+    main()
