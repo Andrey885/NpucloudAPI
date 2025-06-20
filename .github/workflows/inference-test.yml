@@ -1,4 +1,4 @@
-name: Inference Integration Test
+name: Inference Test
 
 on:
   workflow_dispatch:           # run manually
@@ -8,7 +8,7 @@ on:
     branches: [main]
 
 jobs:
-  inference-integration:
+  inference:
     runs-on: ubuntu-22.04
 
     steps:

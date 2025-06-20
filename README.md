@@ -9,9 +9,10 @@
   <a href="https://npucloud.tech/"><strong>NPUCloud Official Website »</strong></a>
 </p>
 
+
 <p align="center">
-  <a href="https://github.com/Andrey885/NpucloudAPI/actions"><img src="https://img.shields.io/github/actions/workflow/status/Andrey885/NpucloudAPI/ci.yml?branch=main" alt="CI"></a>
-  <a href="https://python.org/"><img src="https://img.shields.io/badge/python-3.8+-blue.svg" alt="Python3"></a>
+
+  [![Inference Test](https://github.com/Andrey885/NpucloudAPI/actions/workflows/inference-test.yml/badge.svg)](https://github.com/Andrey885/NpucloudAPI/actions/workflows/inference-test.yml)
   <a href="https://npucloud.tech/"><img src="https://img.shields.io/badge/powered%20by-NPUCloud-orange?logo=thunder"></a>
   <a href="https://github.com/Andrey885/NpucloudAPI/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-green.svg" alt="License"></a>
 </p>
