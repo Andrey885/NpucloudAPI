@@ -5,7 +5,7 @@
 <h1 align="center">NPUCloud Python Client 🚀</h1>
 
 <p align="center">
-  <b>Hardware-efficient hosting & ultra-fast inference for your AI models.</b><br>
+  <b>Hardware-efficient hosting & fast inference for your AI models.</b><br>
   <a href="https://npucloud.tech/"><strong>NPUCloud Official Website »</strong></a>
 </p>
 
