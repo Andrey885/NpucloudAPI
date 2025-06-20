@@ -28,15 +28,15 @@ jobs:
 
     - name: Run minimal inference
       env:
-        NPUCLOUD_TOKEN: ${{ secrets.NPUCLOUD_TOKEN }}
-        NPUCLOUD_MODEL_ID: ${{ secrets.NPUCLOUD_MODEL_ID }}
+        INFERENCE_TOKEN: ${{ secrets.INFERENCE_TOKEN }}
+        SQUEEZENET_MODEL_ID: ${{ secrets.SQUEEZENET_MODEL_ID }}
       run: |
         python -c "
         import numpy as np;
         from npucloud_client import inference
         x = np.random.randn(1, 3, 224, 224)
-        model_id = '${NPUCLOUD_MODEL_ID}'
-        token = '${NPUCLOUD_TOKEN}'
+        model_id = '${SQUEEZENET_MODEL_ID}'
+        token = '${INFERENCE_TOKEN}'
         output, profiling_info = inference(x, model_id, token)
         print('Output:', output.shape)
         print('Profiling:', profiling_info)
