@@ -1,7 +1,7 @@
 # NpucloudAPI
-Hardware-efficient hosting for your AI models
+Hardware-efficient hosting for your AI models.
 
-This is an official Python client for running fast model inference on the NPUCloud service from your Python code.
+This is an official Python client for model inference with [NPUCloud](https://npucloud.tech/).
 
 
 ## Quick Start
