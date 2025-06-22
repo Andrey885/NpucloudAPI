@@ -115,5 +115,4 @@ Apache 2.0
 
 <p align="center">
 Happy inferencing with <b>NPUCloud</b>!<br>
-<i>Performance & Simplicity.</i>
 </p>
