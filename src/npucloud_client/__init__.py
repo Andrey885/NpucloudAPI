@@ -5,6 +5,7 @@ import numpy as np
 
 from . import core
 from .types import ProfilingInfo, CreateTaskResponse, RunTaskResult
+from .upload_model import convert_onnx
 
 
 def inference(x: np.ndarray, model_id: str, token: str

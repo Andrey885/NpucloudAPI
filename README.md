@@ -70,8 +70,6 @@ Returns:
 - The output tensor as np.ndarray
 - Detailed timing as ProfilingInfo (see below)
 
----
-
 #### ProfilingInfo  
 _Comprehensive breakdown of time spent per inference:_
 

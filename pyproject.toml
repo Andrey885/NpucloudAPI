@@ -19,8 +19,9 @@ classifiers = [
 ]
 
 dependencies = [
-    "numpy",
-    "requests",
+    "numpy>=1.0.0",
+    "onnx>=1.7.0",
+    "requests>=2.0.0",
 ]
 
 [project.urls]
