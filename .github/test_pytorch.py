@@ -36,7 +36,9 @@ def test():
     x, out_golden = create_onnx_model(onnx_path)
     api_key = sys.argv[1]
     # upload the model to NPUCloud
-    model_id = npucloud_client.convert_onnx(f"{tmp_dir}/resnet18.onnx", api_key)
+    model_id = npucloud_client.convert_onnx(f"{tmp_dir}/resnet18.onnx", api_key,
+                                            timeout=600  # increase timeout for remote zones
+                                            )
     shutil.rmtree(tmp_dir)
     # run the model
     out, profiling_info = npucloud_client.inference(x, model_id, api_key)
