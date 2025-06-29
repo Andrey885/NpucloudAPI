@@ -42,10 +42,9 @@ def test():
     out, profiling_info = npucloud_client.inference(x, model_id, api_key)
     # check output
     diff = np.mean(np.abs(out - out_golden)) / np.mean(np.abs(out_golden))
-    print("out_golden", out_golden.std(), "out", out.std(), out.shape, profiling_info)
-    print(f"Diff={diff:.5f}")
+    print(f"diff={diff:.5f}, shape={out.shape}, {profiling_info}")
     # 5% diff is allowed. It's related to fp16 rknn conversion
-    # assert diff < 0.05, f"Diff={diff} is too large"  # TODO check emulator vs device
+    assert diff < 0.05, f"Diff={diff} is too large"
     # delete the model
     npucloud_client.delete_model(api_key, model_id)
 
