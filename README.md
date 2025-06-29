@@ -59,8 +59,19 @@ print("Profiling info:", profiling_info)
 ---
 
 ## 🧩 API Overview
+#### convert_onnx(onnx_path: str, token: str) -> str
+Convert an .onnx model at onnx_path to NPUCloud's _model_id_.
+
+See how to use this with a PyTorch model at _examples/resnet18_!
+
+- onnx_path (str): path to your .onnx model
+- token (str): Your NPUCloud API token (see at [NpuCloud](https://npucloud.tech/payments.php)).
+
+Returns:
+- model_id (str). The id of your converted model. Use it in the _inference_ function.
 
 #### inference(x: np.ndarray, model_id: str, token: str) -> Tuple[np.ndarray, ProfilingInfo]
+Call the model inference with NPUCloud.
 
 - x (np.ndarray): Your input tensor (e.g. image). Will be cast to float16.
 - model_id (str): The model catalog ID (see [Your Models](https://npucloud.tech/models.php)).
