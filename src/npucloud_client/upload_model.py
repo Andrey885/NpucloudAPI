@@ -61,7 +61,7 @@ def _tar_source_files(source_files: tp.List[str], tmp_dir: str, onnx_name: str) 
 def _get_presigned_url(source_file: str, api_key: str) -> CreateUploadTaskResponse:
     """Get S3 presigned_url for the model upload"""
     payload = {"file_name": os.path.split(source_file)[1], "token": api_key}
-    resp = requests.post(f"{API_URL}/utils/upload_from_python_client.php", json=payload,
+    resp = requests.post(f"{API_URL}/python_client/upload_from_python_client.php", json=payload,
                          headers=HEADERS, verify=True, timeout=15)
     if resp.status_code != 200:
         raise ValueError(f"Got status {resp.status_code} from the server while requesting the model upload. "
@@ -83,7 +83,7 @@ def _upload_file_to_s3(source_file: str, s3_presigned_url: str, timeout: float =
 
 def convert_model(source_file: str, api_key: str, timeout: float = 180) -> str:
     """
-    Converts the user model (.tar or .onnx file) to NPUCloud's model_id.
+    Uploads the user model (.tar or .onnx file) to NPUCloud, converts to NPU format and returns its model_id.
     Parameters:
     - source_file: str
         Model source file. Can be an .onnx file, or .tar file if onnx is exported with external dependencies.
@@ -98,14 +98,16 @@ def convert_model(source_file: str, api_key: str, timeout: float = 180) -> str:
     # ask for the presigned url
     model_upload_response: CreateUploadTaskResponse = _get_presigned_url(source_file, api_key)
     # upload the model file
-    LOGGER.info(f"Uploading model file to NPUCloud. This may take up to {timeout} seconds...")
+    LOGGER.info(f"Uploading model file to NPUCloud. This may take up to {timeout} "
+                "seconds depending on the file size...")
     _upload_file_to_s3(source_file, model_upload_response.s3_presigned_url, timeout)
     # notify about the upload
     conversion_request = model_upload_response.__dict__
     conversion_request["token"] = api_key
     conversion_request["timeout"] = timeout
-    LOGGER.info(f"Waiting for the NPUCloud's conversion process. This may take up to {timeout} seconds...")
-    resp = requests.post(f"{API_URL}/utils/call_conversion.php", json=conversion_request,
+    LOGGER.info(f"Waiting for the NPUCloud's conversion process. This may take up to {timeout} seconds "
+                "depending on the model complexity...")
+    resp = requests.post(f"{API_URL}/python_client/call_conversion.php", json=conversion_request,
                          headers=HEADERS, verify=True, timeout=timeout)
     if resp.status_code != 200:
         raise ValueError(f"Got status {resp.status_code} from the server during the model conversion. "
@@ -115,7 +117,7 @@ def convert_model(source_file: str, api_key: str, timeout: float = 180) -> str:
     t0 = time.time()
     while time.time() < t0 + timeout:
         time.sleep(1)
-        resp = requests.post(f"{API_URL}/utils/check_conversion.php", json=conversion_check_request,
+        resp = requests.post(f"{API_URL}/python_client/check_conversion.php", json=conversion_check_request,
                              headers=HEADERS, verify=True, timeout=timeout)
         if resp.status_code != 200:
             raise ValueError(f"Got status {resp.status_code} from the server during the model conversion check. "
@@ -124,8 +126,16 @@ def convert_model(source_file: str, api_key: str, timeout: float = 180) -> str:
             resp = CheckUploadTaskResponse(**resp.json())
         except ValueError as e:
             raise ValueError(f"Could not decode model upload check's response. Err msg: {resp.text}") from e
-        if resp.rknn_model_hash != "":
+        if "Conversion error" in resp.status:
+            raise ValueError("Could not convert the model to NPU format. There is probably an issue with your onnx"
+                             "file, such as unsupported operations or I/O formats. See the full stack trace at "
+                             "https://npucloud.tech/models.php or consult with"
+                             "https://npucloud.tech/docs/npu_conversion.php")
+        elif "Converted successfully" in resp.status:
             break
+    if "Converted successfully" not in resp.status:
+        raise ValueError(f"Conversion process timed out after {timeout} seconds. However, it is continued on our "
+                         "internal servers. You may trace it at https://npucloud.tech/models.php")
     return resp.rknn_model_hash
 
 
@@ -157,27 +167,3 @@ def convert_onnx(onnx_path: str, api_key: str, timeout: float = 180) -> str:
     LOGGER.info(f"NPUCloud model is converted successfully. Your model_id is {model_id}. "
                 "Visit https://npucloud.tech/models.php to learn more!")
     return model_id
-
-
-def __test():
-    """
-    Test upload function.
-    Usage:
-        - get your token at https://npucloud.tech/payments.php
-        - python upload_model.py <YOUR_TOKEN>
-    """
-    import sys
-    import torch
-    import torchvision
-    model = torchvision.models.resnet18()
-    model.eval()
-    x = torch.zeros((1, 3, 224, 224))
-    tmp_dir = tempfile.mkdtemp()
-    torch.onnx.export(model, (x,), f"{tmp_dir}/resnet18.onnx")
-    api_key = sys.argv[1]
-    convert_onnx(f"{tmp_dir}/resnet18.onnx", api_key)
-    shutil.rmtree(tmp_dir)
-
-
-if __name__ == '__main__':
-    __test()
