@@ -81,6 +81,15 @@ def _upload_file_to_s3(source_file: str, s3_presigned_url: str, timeout: float =
     r.raise_for_status()
 
 
+def check_size_limit(source_file: str, max_model_size=5 * 1e9):
+    """
+    Check if the model size is not larger than 5Gb (AWS S3 upload limitation)
+    """
+    if os.path.getsize(source_file) > max_model_size:
+        raise ValueError(f"File {source_file} of size {os.path.getsize(source_file) / 1e9:.2f} Gb exceeds "
+                         f"the upload limit of {max_model_size/1e9:.2f}Gb")
+
+
 def convert_model(source_file: str, api_key: str, timeout: float = 180) -> str:
     """
     Uploads the user model (.tar or .onnx file) to NPUCloud, converts to NPU format and returns its model_id.
@@ -95,6 +104,7 @@ def convert_model(source_file: str, api_key: str, timeout: float = 180) -> str:
     - model_id: str
         Your NPUCloud's model_id. Check your models at https://npucloud.tech/models.php
     """
+    check_size_limit(source_file)
     # ask for the presigned url
     model_upload_response: CreateUploadTaskResponse = _get_presigned_url(source_file, api_key)
     # upload the model file

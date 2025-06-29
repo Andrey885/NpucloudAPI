@@ -38,20 +38,28 @@ python -m pip install numpy requests
 ```
 python -m pip install git+https://github.com/Andrey885/NpucloudAPI@main
 ```
-### 3. Inference Example
+# 📖 Example
+Check out our <a href=https://github.com/Andrey885/NpucloudAPI/tree/main/examples> examples</a> to learn more!
+
 ```
 import numpy as np
-from npucloud_client import inference
+import npucloud_client
 
 # Step 1: Prepare your input (for example, a random image tensor)
 x = np.random.randn(1, 3, 224, 224)
 
-# Step 2: Set your model & auth details
-model_id = "YOUR_MODEL_ID"    # See: https://npucloud.tech/models.php
+# Step 2: Prepare your ONNX model
+onnx_path = "your_awesome_model.onnx"
+
+# Step 3: Set your token
 token = "YOUR_TOKEN"          # Get your token: https://npucloud.tech/payments.php
 
-# Step 3: Run inference on the cloud NPU!
-output, profiling_info = inference(x, model_id, token)
+# Step 4: export your model to NPUCloud (up to 5Gb model size)
+model_id = npucloud_client.convert_onnx(onnx_path,token)
+# see your model_id at https://npucloud.tech/models.php
+
+# Step 5: Run inference on the cloud NPU!
+output, profiling_info = npucloud_client.inference(x, model_id, token)
 
 print("Output shape:", output.shape)
 print("Profiling info:", profiling_info)
@@ -60,7 +68,7 @@ print("Profiling info:", profiling_info)
 
 ## 🧩 API Overview
 #### convert_onnx(onnx_path: str, token: str) -> str
-Convert an .onnx model at onnx_path to NPUCloud's _model_id_.
+Convert an .onnx model at onnx_path to NPUCloud's _model_id_. Model size limit is 5Gb.
 
 See how to use this with a PyTorch model at _examples/resnet18_!
 
