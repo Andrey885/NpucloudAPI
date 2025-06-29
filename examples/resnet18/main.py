@@ -11,7 +11,7 @@ import npucloud_client
 def parse_args():
     parser = argparse.ArgumentParser("Resnet18 NPUCloud example")
     parser.add_argument("--api_token", type=str, required=True,
-                        help="Your API token. Get one at https://npucloud.tech/payments.php")    
+                        help="Your API token. Get one at https://npucloud.tech/payments.php")
     args = parser.parse_args()
     return args
 

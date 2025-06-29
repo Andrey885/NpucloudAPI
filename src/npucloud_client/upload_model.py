@@ -115,7 +115,7 @@ def convert_model(source_file: str, api_key: str, timeout: float = 180) -> str:
     conversion_request = model_upload_response.__dict__
     conversion_request["token"] = api_key
     conversion_request["timeout"] = timeout
-    LOGGER.info(f"Waiting for the NPUCloud's conversion process. This may take up to {timeout} seconds "
+    LOGGER.info(f"Started NPU conversion process. This may take up to {timeout} seconds "
                 "depending on the model complexity...")
     resp = requests.post(f"{API_URL}/python_client/call_conversion.php", json=conversion_request,
                          headers=HEADERS, verify=True, timeout=timeout)
