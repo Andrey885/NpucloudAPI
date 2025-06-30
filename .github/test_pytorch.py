@@ -10,7 +10,7 @@ import npucloud_client
 
 
 def create_onnx_model(onnx_path: str):
-    model = torchvision.models.resnet18(weights=torchvision.models.ResNet18_Weights.IMAGENET1K_V1)
+    model = torchvision.models.SqueezeNet()
     model.eval()
     model = model.half().float()
     x = np.random.randn(1, 3, 224, 224).astype(np.float16).astype(np.float32)
