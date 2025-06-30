@@ -8,7 +8,6 @@ import time
 import typing as tp
 
 import requests
-import onnx
 
 LOGGER = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -36,6 +35,7 @@ def _find_source_files(onnx_path: str) -> tp.List[str]:
     Checks for the dependency files in the .onnx.
     The dependency files can be generated if a large (>2Gb) model is exported.
     """
+    import onnx
     model = onnx.load(onnx_path)
     onnx_dir = os.path.split(onnx_path)[0]
     external_files = set([onnx_path])

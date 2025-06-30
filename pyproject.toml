@@ -20,9 +20,12 @@ classifiers = [
 
 dependencies = [
     "numpy>=1.0.0",
-    "onnx>=1.7.0",
     "requests>=2.0.0",
 ]
+
+[project.optional-dependencies]
+onnx = ["onnx>=1.7.0"]
+all = ["onnx>=1.7.0", "torch>=1.0.0"]
 
 [project.urls]
 Homepage = "https://github.com/Andrey885/NpucloudAPI"

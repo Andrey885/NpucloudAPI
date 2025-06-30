@@ -35,9 +35,19 @@
 python -m pip install numpy requests
 ```
 ### 2. Install the NPUCloud client from GitHub
+For minimal inference functionality, install with
 ```
 python -m pip install git+https://github.com/Andrey885/NpucloudAPI@main
 ```
+Or, if you want to export models to NpuCloud from ONNX with _npucloud_client_,
+```
+python -m pip install git+https://github.com/Andrey885/NpucloudAPI@main[onnx]
+```
+Or, if you want to export models to NpuCloud directly from PyTorch with _npucloud_client_,
+```
+python -m pip install git+https://github.com/Andrey885/NpucloudAPI@main[all]
+```
+
 # 📖 Example
 Check out our <a href=https://github.com/Andrey885/NpucloudAPI/tree/main/examples> examples</a> to learn more!
 

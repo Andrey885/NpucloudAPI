@@ -23,9 +23,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install numpy requests
-        python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-        python -m pip install -e .
+        python -m pip install -e .[all]
 
     - name: Run minimal inference
       env:
