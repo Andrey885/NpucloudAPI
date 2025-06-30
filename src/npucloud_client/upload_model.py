@@ -13,7 +13,7 @@ import onnx
 LOGGER = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-API_URL = "https://npucloud.tech"
+API_URL = "https://www.npucloud.tech"
 HEADERS = {"Content-Type": "application/json"}
 
 
@@ -97,12 +97,12 @@ def convert_model(source_file: str, api_key: str, timeout: float = 180) -> str:
     - source_file: str
         Model source file. Can be an .onnx file, or .tar file if onnx is exported with external dependencies.
     - api_key: str
-        Your inference token. Get one at https://npucloud.tech/payments.php
+        Your inference token. Get one at https://www.npucloud.tech/payments.php
     - timeout: float
         How much time to give for the upload and conversion tasks
     Returns:
     - model_id: str
-        Your NPUCloud's model_id. Check your models at https://npucloud.tech/models.php
+        Your NPUCloud's model_id. Check your models at https://www.npucloud.tech/models.php
     """
     check_size_limit(source_file)
     # ask for the presigned url
@@ -139,13 +139,13 @@ def convert_model(source_file: str, api_key: str, timeout: float = 180) -> str:
         if "Conversion error" in resp.status:
             raise ValueError("Could not convert the model to NPU format. There is probably an issue with your onnx"
                              "file, such as unsupported operations or I/O formats. See the full stack trace at "
-                             "https://npucloud.tech/models.php or consult with"
-                             "https://npucloud.tech/docs/npu_conversion.php")
+                             "https://www.npucloud.tech/models.php or consult with"
+                             "https://www.npucloud.tech/docs/npu_conversion.php")
         elif "Converted successfully" in resp.status:
             break
     if "Converted successfully" not in resp.status:
         raise ValueError(f"Conversion process timed out after {timeout} seconds. However, it is continued on our "
-                         "internal servers. You may trace it at https://npucloud.tech/models.php")
+                         "internal servers. You may trace it at https://www.npucloud.tech/models.php")
     return resp.rknn_model_hash
 
 
@@ -156,12 +156,12 @@ def convert_onnx(onnx_path: str, api_key: str, timeout: float = 180) -> str:
     - onnx_path: str
         Path to the .onnx model file. If exported with external data, the external files are included automatically.
     - api_key: str
-        Your inference token. Get one at https://npucloud.tech/payments.php
+        Your inference token. Get one at https://www.npucloud.tech/payments.php
     - timeout: float
         How much time to give for the upload and conversion tasks
     Returns:
     - model_id: str
-        Your NPUCloud's model_id. Check your models at https://npucloud.tech/models.php
+        Your NPUCloud's model_id. Check your models at https://www.npucloud.tech/models.php
     """
     if not onnx_path.endswith(".onnx"):
         raise ValueError(f".onnx extension is expected. Got file path: {onnx_path}")
@@ -175,5 +175,5 @@ def convert_onnx(onnx_path: str, api_key: str, timeout: float = 180) -> str:
         raise
     shutil.rmtree(tmp_dir)
     LOGGER.info(f"NPUCloud model is converted successfully. Your model_id is {model_id}. "
-                "Visit https://npucloud.tech/models.php to learn more!")
+                "Visit https://www.npucloud.tech/models.php to learn more!")
     return model_id

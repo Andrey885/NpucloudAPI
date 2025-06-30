@@ -26,7 +26,7 @@ def test():
     Test upload function. Uploads resnet18 to NPUCloud, infers with pytorch and npucloud,
     checks the output difference.
     Usage:
-        - get your token at https://npucloud.tech/payments.php
+        - get your token at https://www.npucloud.tech/payments.php
         - python test.py <YOUR_TOKEN>
     """
     tmp_dir = tempfile.mkdtemp()

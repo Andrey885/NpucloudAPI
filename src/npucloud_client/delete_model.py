@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import requests
 
-API_URL = "https://npucloud.tech"
+API_URL = "https://www.npucloud.tech"
 HEADERS = {"Content-Type": "application/json"}
 
 
@@ -17,9 +17,9 @@ def delete_model(api_key: str, model_id: str):
     Delete the model from NPUCloud.
     Parameters:
         - api_key: str
-    Your API key. Get one at https://npucloud.tech/payments.php
+    Your API key. Get one at https://www.npucloud.tech/payments.php
         - model_id: str
-    Your model_id. Check your models at https://npucloud.tech/models.php
+    Your model_id. Check your models at https://www.npucloud.tech/models.php
     """
     payload = {"token": api_key, "model_id": model_id}
     resp = requests.post(f"{API_URL}/python_client/delete_model.php", json=payload, headers=HEADERS,

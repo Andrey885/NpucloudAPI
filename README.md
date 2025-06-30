@@ -1,19 +1,19 @@
 <p align="center">
-  <img src="https://npucloud.tech/img/logo.png" alt="NPUCloud Logo" width="260"/>
+  <img src="https://www.npucloud.tech/img/logo.png" alt="NPUCloud Logo" width="260"/>
 </p>
 
 <h1 align="center">NPUCloud Python Client 🚀</h1>
 
 <p align="center">
   <b>Hardware-efficient hosting & fast inference for your AI models.</b><br>
-  <a href="https://npucloud.tech/"><strong>NPUCloud Official Website »</strong></a>
+  <a href="https://www.npucloud.tech/"><strong>NPUCloud Official Website »</strong></a>
 </p>
 
 
 <p align="center">
 
   [![Inference Test](https://github.com/Andrey885/NpucloudAPI/actions/workflows/inference-test.yml/badge.svg)](https://github.com/Andrey885/NpucloudAPI/actions/workflows/inference-test.yml)
-  <a href="https://npucloud.tech/"><img src="https://img.shields.io/badge/powered%20by-NPUCloud-orange?logo=thunder"></a>
+  <a href="https://www.npucloud.tech/"><img src="https://img.shields.io/badge/powered%20by-NPUCloud-orange?logo=thunder"></a>
   <a href="https://github.com/Andrey885/NpucloudAPI/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-green.svg" alt="License"></a>
 </p>
 
@@ -52,11 +52,11 @@ x = np.random.randn(1, 3, 224, 224)
 onnx_path = "your_awesome_model.onnx"
 
 # Step 3: Set your token
-token = "YOUR_TOKEN"          # Get your token: https://npucloud.tech/payments.php
+token = "YOUR_TOKEN"          # Get your token: https://www.npucloud.tech/payments.php
 
 # Step 4: export your model to NPUCloud (up to 5Gb model size)
 model_id = npucloud_client.convert_onnx(onnx_path,token)
-# see your model_id at https://npucloud.tech/models.php
+# see your model_id at https://www.npucloud.tech/models.php
 
 # Step 5: Run inference on the cloud NPU!
 output, profiling_info = npucloud_client.inference(x, model_id, token)
@@ -73,7 +73,7 @@ Convert an .onnx model at onnx_path to NPUCloud's _model_id_. Model size limit i
 See how to use this with a PyTorch model at _examples/resnet18_!
 
 - onnx_path (str): path to your .onnx model
-- token (str): Your NPUCloud API token (see at [NpuCloud](https://npucloud.tech/payments.php)).
+- token (str): Your NPUCloud API token (see at [NpuCloud](https://www.npucloud.tech/payments.php)).
 
 Returns:
 - model_id (str). The id of your converted model. Use it in the _inference_ function.
@@ -82,8 +82,8 @@ Returns:
 Call the model inference with NPUCloud.
 
 - x (np.ndarray): Your input tensor (e.g. image). Will be cast to float16.
-- model_id (str): The model catalog ID (see [Your Models](https://npucloud.tech/models.php)).
-- token (str): Your NPUCloud API token (see at [NpuCloud](https://npucloud.tech/payments.php)).
+- model_id (str): The model catalog ID (see [Your Models](https://www.npucloud.tech/models.php)).
+- token (str): Your NPUCloud API token (see at [NpuCloud](https://www.npucloud.tech/payments.php)).
 
 Returns:  
 - The output tensor as np.ndarray
@@ -103,8 +103,8 @@ _Comprehensive breakdown of time spent per inference:_
 
 ## 🛠️ How to Use Your Own Model
 
-- Check out our [Get Started Guide](https://npucloud.tech/docs/get_started.php) for model upload, format conversion, and advanced tips!
-- Pre-trained models available at [Model Catalog](https://npucloud.tech/docs/pretrained_models.php)
+- Check out our [Get Started Guide](https://www.npucloud.tech/docs/get_started.php) for model upload, format conversion, and advanced tips!
+- Pre-trained models available at [Model Catalog](https://www.npucloud.tech/docs/pretrained_models.php)
 
 ---
 
@@ -117,10 +117,10 @@ _Comprehensive breakdown of time spent per inference:_
 
 ## 🔗 Useful Links
 
-- 🌐 [NPUCloud Official Website](https://npucloud.tech/dashboard.php)
-- 📖 [Get an API Token](https://npucloud.tech/payments.php)
-- 🤖 [Model Catalog](https://npucloud.tech/docs/pretrained_models.php)
-- 📚 [Docs & Quickstart](https://npucloud.tech/docs/get_started.php)
+- 🌐 [NPUCloud Official Website](https://www.npucloud.tech/dashboard.php)
+- 📖 [Get an API Token](https://www.npucloud.tech/payments.php)
+- 🤖 [Model Catalog](https://www.npucloud.tech/docs/pretrained_models.php)
+- 📚 [Docs & Quickstart](https://www.npucloud.tech/docs/get_started.php)
 
 ---
 

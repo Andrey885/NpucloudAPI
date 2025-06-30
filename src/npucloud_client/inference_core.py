@@ -16,10 +16,10 @@ def inference(x: np.ndarray, model_id: str, token: str
             Model's input. This data will be cast to float16 and put to the model you've uploaded as is
             (no norm or other preprocessing is applied)
         model_id: str
-            ID of the model to run. Upload your ONNX model at https://npucloud.tech/upload.php
-            and get its ID at https://npucloud.tech/models.php
+            ID of the model to run. Upload your ONNX model at https://www.npucloud.tech/upload.php
+            and get its ID at https://www.npucloud.tech/models.php
         token: str
-            Inference token. Get your token at https://npucloud.tech/payments.php
+            Inference token. Get your token at https://www.npucloud.tech/payments.php
     Returns:
         np.typing.NDArray[np.float16]
             Output array. Matches the output of the .onnx model uploaded by user with no more than
