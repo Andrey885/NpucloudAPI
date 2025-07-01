@@ -53,17 +53,17 @@ def main():
         model.encoder = PyTorchWrapperFromModelId(WHISPER_PRECOMPILED_MODEL_ID,
                                                   args.api_token, (1, 128, 3000))
     LOGGER.info("NpuCloud wrapper created in %.3f sec", time.perf_counter() - t0)
-    t0 = time.perf_counter()
     audio = whisper.pad_or_trim(sample_wav)
+    options = whisper.DecodingOptions()
     # make log-Mel spectrogram
     mel = whisper.log_mel_spectrogram(audio, n_mels=model.dims.n_mels)
+    result = whisper.decode(model, mel, options)  # first API call to convert the model and heat up NPUCloud's caches
     # decode the audio
     t0 = time.perf_counter()
-    options = whisper.DecodingOptions()
     result = whisper.decode(model, mel, options)
     LOGGER.info("Inference completed in %.3f sec", time.perf_counter() - t0)
     LOGGER.info("Speech recognition result: %s", result[0].text)
-    LOGGER.info("NPUCloud profiling info: %s", model.encoder.get_latest_profiling_info())
+    LOGGER.info("NPU compute time: %.3f", model.encoder.get_latest_profiling_info().npu_compute_time)
 
 
 if __name__ == '__main__':
