@@ -14,9 +14,10 @@ class PyTorchWrapper(torch.nn.Module):  # inherited from torch.nn.Module to be a
     statically with the received shape.
     Later on, it expects only the input of this shape and fails otherwise.
     """
-    def __init__(self, model: torch.nn.Module, api_token: str):
+    def __init__(self, model: torch.nn.Module, api_token: str, timeout: float = 180):
         super().__init__()
         self.model = model
+        self.conversion_timeout = timeout
         self.input_shape = None
         self.model_id = None
         self.api_token = api_token
@@ -31,7 +32,7 @@ class PyTorchWrapper(torch.nn.Module):  # inherited from torch.nn.Module to be a
             # Using default parameters. Try playing around with opset and other arguments if this line fails.
             torch.onnx.export(self.model, (x,), onnx_path, input_names=["input0"])
             # 2. upload the model to NPUCloud and convert to the NPU format
-            self.model_id = npucloud_client.convert_onnx(onnx_path, self.api_token)
+            self.model_id = npucloud_client.convert_onnx(onnx_path, self.api_token, timeout=self.conversion_timeout)
             self.model = torch.nn.Identity()  # cleanup the model
             shutil.rmtree(tmp_dir)
         except:  # NOQA
