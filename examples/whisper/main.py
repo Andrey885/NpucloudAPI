@@ -1,7 +1,6 @@
 import argparse
-import shutil
+import logging
 import time
-import tempfile
 
 import numpy as np
 import torch
@@ -9,13 +8,21 @@ import torchaudio
 import whisper  # install with pip install openai-whisper
 
 import npucloud_client
-from npucloud_client.pytorch_wrapper import PyTorchWrapper
+from npucloud_client.pytorch_wrapper import PyTorchWrapper, PyTorchWrapperFromModelId
+
+WHISPER_PRECOMPILED_MODEL_ID = "7e60b9f859817f0f8f3d2766e0126688"
+LOGGER = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 
 def parse_args():
+    """Parse args for the whisper demo"""
     parser = argparse.ArgumentParser("Resnet18 NPUCloud example")
     parser.add_argument("--api_token", type=str, required=True,
                         help="Your API token. Get one at https://www.npucloud.tech/payments.php")
+    parser.add_argument("--rebuild", action="store_true",
+                        help="If passed, will recompile the Whisper model with NPUCloud. It will be exported into "
+                             "your account at https://www.npucloud.tech/models.php")
     args = parser.parse_args()
     return args
 
@@ -31,28 +38,32 @@ def _load_sample_audio(whisper_sr: int = 16000):
 
 
 def main():
+    """Whisper inference example with NPUCloud"""
     t0 = time.perf_counter()
     args = parse_args()
     sample_wav = _load_sample_audio()
     model = whisper.load_model('turbo')
     model.eval()
-    print("model loaded", time.perf_counter() - t0)
-    t0 = time.perf_counter()
+    LOGGER.info("Whisper model loaded in %.3f sec", time.perf_counter() - t0)
     # convert Whisper encoder from PyTorch to NPUCloud model
-    model.encoder = PyTorchWrapper(model.encoder, args.api_token)
-    print("rknn created", time.perf_counter() - t0)
+    t0 = time.perf_counter()
+    if args.rebuild:
+        model.encoder = PyTorchWrapper(model.encoder, args.api_token, timeout=600, model_name="whisper_encoder")
+    else:
+        model.encoder = PyTorchWrapperFromModelId(WHISPER_PRECOMPILED_MODEL_ID,
+                                                  args.api_token, (1, 128, 3000))
+    LOGGER.info("NpuCloud wrapper created in %.3f sec", time.perf_counter() - t0)
     t0 = time.perf_counter()
     audio = whisper.pad_or_trim(sample_wav)
     # make log-Mel spectrogram
     mel = whisper.log_mel_spectrogram(audio, n_mels=model.dims.n_mels)
     # decode the audio
-    print("mel", mel.shape)
     t0 = time.perf_counter()
     options = whisper.DecodingOptions()
     result = whisper.decode(model, mel, options)
-    print("text inferred", time.perf_counter() - t0)
-    print(result)
-    exit()
+    LOGGER.info("Inference completed in %.3f sec", time.perf_counter() - t0)
+    LOGGER.info("Speech recognition result: %s", result[0].text)
+    LOGGER.info("NPUCloud profiling info: %s", model.encoder.get_latest_profiling_info())
 
 
 if __name__ == '__main__':

@@ -7,7 +7,7 @@ from .types import ProfilingInfo, CreateTaskResponse, RunTaskResult
 from . import core
 
 
-def inference(x: np.ndarray, model_id: str, token: str
+def inference(x: np.ndarray, model_id: str, token: str, timeout: float = 60
               ) -> tp.Tuple[np.ndarray, ProfilingInfo]:
     """
     Call the npucloud inference.
@@ -20,6 +20,8 @@ def inference(x: np.ndarray, model_id: str, token: str
             and get its ID at https://www.npucloud.tech/models.php
         token: str
             Inference token. Get your token at https://www.npucloud.tech/payments.php
+        timeout: float
+            Timeout for the inference call
     Returns:
         np.typing.NDArray[np.float16]
             Output array. Matches the output of the .onnx model uploaded by user with no more than
@@ -34,7 +36,8 @@ def inference(x: np.ndarray, model_id: str, token: str
     # upload the input to AWS
     core.upload_input(x, created_task.presigned_url, profiling_info)
     # call npucloud's model inference
-    inference_data: RunTaskResult = core.call_inference(created_task.task_id, token, profiling_info)
+    inference_data: RunTaskResult = core.call_inference(created_task.task_id, token, profiling_info,
+                                                        timeout)
     # download the inference result
     output = core.download_result(inference_data, profiling_info)
     profiling_info.total_time = round(time.perf_counter() - t0, 3)

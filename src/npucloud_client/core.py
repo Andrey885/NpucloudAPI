@@ -42,14 +42,15 @@ def upload_input(x: np.ndarray, presigned_url: str, profiling_info: ProfilingInf
     profiling_info.t_input_upload = round(time.perf_counter() - t0, 3)
 
 
-def call_inference(task_id: str, token: str, profiling_info: ProfilingInfo) -> RunTaskResult:
+def call_inference(task_id: str, token: str, profiling_info: ProfilingInfo,
+                   timeout: float = 60) -> RunTaskResult:
     """Notify npucloud that the input is uploaded, call the model's inference"""
     t0 = time.perf_counter()
     payload = {
         "task_id": task_id,
         "token": token
     }
-    resp = requests.post(f"{API_URL}/run_task", json=payload, headers=HEADERS, verify=True, timeout=15)
+    resp = requests.post(f"{API_URL}/run_task", json=payload, headers=HEADERS, verify=True, timeout=timeout)
     profiling_info.t_compute_queue = round(time.perf_counter() - t0, 3)
     if resp.status_code != 200:
         raise ValueError(f"Got status {resp.status_code} from the server during the inference call. "
