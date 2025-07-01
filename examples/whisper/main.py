@@ -46,6 +46,9 @@ def main():
     model.eval()
     LOGGER.info("Whisper model loaded in %.3f sec", time.perf_counter() - t0)
     # convert Whisper encoder from PyTorch to NPUCloud model
+    # NOTE: we only convert the audio encoder here.
+    # The reasons for that are, firstly, that the audio encoder is the heaviest part of the model,
+    # and secondly that NPUCloud currently only supports static inputs shapes. 
     t0 = time.perf_counter()
     if args.rebuild:
         model.encoder = PyTorchWrapper(model.encoder, args.api_token, timeout=600, model_name="whisper_encoder")
