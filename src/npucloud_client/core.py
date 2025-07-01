@@ -7,7 +7,6 @@ from .types import CreateTaskResponse, RunTaskResult, ProfilingInfo
 
 API_URL = "https://inference.npucloud.tech"
 HEADERS = {"Content-Type": "application/json"}
-TIMEOUT = 15
 
 
 def create_inference_task(model_id: str, token: str, profiling_info: ProfilingInfo
@@ -37,13 +36,13 @@ def upload_input(x: np.ndarray, presigned_url: str, profiling_info: ProfilingInf
     # shape will be restored before inference from the model's io specification
     x_bytes = x.astype(np.float16).reshape(-1).tobytes()
     # Upload file to S3
-    resp = requests.put(presigned_url, data=x_bytes, timeout=TIMEOUT)
+    resp = requests.put(presigned_url, data=x_bytes, timeout=60)
     resp.raise_for_status()
     profiling_info.t_input_upload = round(time.perf_counter() - t0, 3)
 
 
 def call_inference(task_id: str, token: str, profiling_info: ProfilingInfo,
-                   timeout: float = 60) -> RunTaskResult:
+                   timeout: float = 180) -> RunTaskResult:
     """Notify npucloud that the input is uploaded, call the model's inference"""
     t0 = time.perf_counter()
     payload = {
@@ -68,7 +67,7 @@ def download_result(inference_data: RunTaskResult, profiling_info: ProfilingInfo
     t0 = time.perf_counter()
     if len(inference_data.output_encoded) == 0:
         received_data = []
-        with requests.get(inference_data.presigned_url, stream=True, timeout=TIMEOUT) as r:
+        with requests.get(inference_data.presigned_url, stream=True, timeout=60) as r:
             r.raise_for_status()
             for chunk in r.iter_content(chunk_size=8192):
                 if chunk:
