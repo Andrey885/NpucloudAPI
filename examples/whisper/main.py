@@ -5,7 +5,7 @@ import time
 import numpy as np
 import torch
 import torchaudio
-import whisper  # install with pip install openai-whisper
+import whisper  # install with "$ pip install openai-whisper"
 
 import npucloud_client
 from npucloud_client.pytorch_wrapper import PyTorchWrapper, PyTorchWrapperFromModelId
