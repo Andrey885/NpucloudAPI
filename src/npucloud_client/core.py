@@ -18,7 +18,7 @@ def create_inference_task(model_id: str, token: str, profiling_info: ProfilingIn
         "model_id": model_id,
         "token": token
     }
-    resp = requests.post(f"{API_URL}/create_task", json=payload, headers=HEADERS, verify=True, timeout=15)
+    resp = requests.post(f"{API_URL}/create_task", json=payload, headers=HEADERS, verify=True, timeout=60)
     profiling_info.t_task_creation = round(time.perf_counter() - t0, 3)
     if resp.status_code != 200:
         raise ValueError(f"Got status {resp.status_code} from the server during the inference task creation. "
