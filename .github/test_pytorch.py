@@ -4,16 +4,26 @@ import shutil
 
 import numpy as np
 import torch
-import torchvision
 
 import npucloud_client
 
 
+class SimpleModel(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv = torch.nn.Conv2d(1, 1, 1, bias=False)
+
+    def forward(self, x):
+        x = self.conv(x)
+        x = torch.mean(x, dim=(1, 2, 3))
+        return x
+
+
 def create_onnx_model(onnx_path: str):
-    model = torchvision.models.SqueezeNet()
+    model = SimpleModel()
     model.eval()
     model = model.half().float()
-    x = np.random.randn(1, 3, 224, 224).astype(np.float16).astype(np.float32)
+    x = np.random.randn(1, 3, 16, 16).astype(np.float16).astype(np.float32)
     x_pt = torch.from_numpy(x)
     with torch.no_grad():
         out_golden = model(x_pt).numpy()
@@ -23,20 +33,20 @@ def create_onnx_model(onnx_path: str):
 
 def test():
     """
-    Test upload function. Uploads resnet18 to NPUCloud, infers with pytorch and npucloud,
+    Test upload function. Uploads SimpleModel to NPUCloud, infers with pytorch and npucloud,
     checks the output difference.
     Usage:
         - get your token at https://www.npucloud.tech/payments.php
         - python test.py <YOUR_TOKEN>
     """
     tmp_dir = tempfile.mkdtemp()
-    onnx_path = f"{tmp_dir}/resnet18.onnx"
-    # create a resnet18 model
+    onnx_path = f"{tmp_dir}/SimpleModel.onnx"
+    # create a model
     np.random.seed(4)
     x, out_golden = create_onnx_model(onnx_path)
     api_key = sys.argv[1]
     # upload the model to NPUCloud
-    model_id = npucloud_client.convert_onnx(f"{tmp_dir}/resnet18.onnx", api_key)
+    model_id = npucloud_client.convert_onnx(f"{tmp_dir}/SimpleModel.onnx", api_key)
     shutil.rmtree(tmp_dir)
     # run the model
     out, profiling_info = npucloud_client.inference(x, model_id, api_key)
