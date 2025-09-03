@@ -2,8 +2,8 @@ name: Inference Test
 
 on:
   workflow_dispatch:           # run manually
-  schedule:                    # run every hour
-    - cron: '0 * * * *'
+  schedule:                    # run every day
+    - cron: '0 0 * * *'
   push:                        # run on every push
     branches: [main]
 
