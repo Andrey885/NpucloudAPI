@@ -18,6 +18,8 @@
 </p>
 
 ---
+## On hold notice
+This project is currently on hold. The servers are temporarily disabled. If you're an NPU hardware developer interested in our product, please contact us at asshilof@gmail.com.
 
 ## ✨ Why NPUCloud?
 
