@@ -19,7 +19,7 @@
 
 ---
 ## On hold notice
-This project is currently on hold. The servers are temporarily disabled. If you're an NPU hardware developer interested in our product, please contact us at asshilof@gmail.com.
+This project is currently on hold. We're expecting to make another iteration once Intel's AI PC NPUs are available. If you're an NPU hardware developer interested in our product, please contact us at asshilof@gmail.com.
 
 ## ✨ Why NPUCloud?
 
